@@ -5,4 +5,12 @@ dependencies {
     implementation 'io.javalin:javalin:3.13.4'
 }
 
+jar {
+    manifest(
+            attributes("Implementation-Title": "Kriegsspiel",
+                   "Implementation-Version": archiveVersion,
+                    "Main-Class": "ks.server.Server")
+    )
+}
+
 apply from: "$rootDir/buildtool/core.gradle"
