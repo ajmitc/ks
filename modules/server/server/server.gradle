@@ -2,15 +2,17 @@ description = "Server for KS"
 
 dependencies {
     implementation project(":modules:common:common-mdl")
-    implementation 'io.javalin:javalin:3.13.4'
+    compile 'io.javalin:javalin:3.13.4'
 }
 
 jar {
-    manifest(
+    manifest{
             attributes("Implementation-Title": "Kriegsspiel",
                    "Implementation-Version": archiveVersion,
-                    "Main-Class": "ks.server.Server")
-    )
+                    "Main-Class": "ks.server.Server",
+                    "Class-Path": configurations.compile.collect { it.getName() }.join(' '))
+    }
+    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {}
 }
 
 apply from: "$rootDir/buildtool/core.gradle"

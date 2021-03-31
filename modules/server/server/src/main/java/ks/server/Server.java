@@ -33,8 +33,6 @@ public class Server {
         });
 
         // Endpoint handlers matched in order defined
-        app.get("/", ctx -> ctx.result("Hello World"));
-
         app.get("/", ctx -> {
             ctx.json("Hello World");
             ctx.status(200);
@@ -59,11 +57,12 @@ public class Server {
         });
          */
 
-        app.post("/", ctx -> {throw new ForbiddenResponse("Off limits!");});
+        //app.post("/", ctx -> {throw new ForbiddenResponse("Off limits!");});
 
         //app.error(404, ViewUtil.notFound);
 
         // Websockets
+        /*
         app.ws("/websocket/:path", ws -> {
             ws.onConnect(ctx -> System.out.println("Connected"));
             // ws.onConnect(WsConnectContext)
@@ -72,6 +71,7 @@ public class Server {
             // ws.onMessage(WsMessageContext)
             // ws.onBinaryMessage(WsBinaryMessageContext)
         });
+         */
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             app.stop();

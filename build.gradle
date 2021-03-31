@@ -23,9 +23,11 @@ configure(subprojects - project(":modules")){
 
     dependencies {
         //testImplementation "junit:junit-4.12"
-        implementation "org.slf4j:slf4j-api:1.7.26"
-        //compile "org.apache.logging.log4j:log4j-to-slf4j:2.11.2"
-        //compile "org.slf4j:jul-to-slf4j:1.7.26"
+        compile "org.slf4j:slf4j-api:1.7.30"
+        compile "org.slf4j:slf4j-simple:1.7.30"
+        compile "org.apache.logging.log4j:log4j-to-slf4j:2.11.2"
+        compile "org.slf4j:jul-to-slf4j:1.7.30"
+        compile "com.fasterxml.jackson.core:jackson-databind:2.10.3"
     }
 
     ext {
