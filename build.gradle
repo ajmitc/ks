@@ -1,0 +1,44 @@
+description = "Kriegsspiel Game"
+
+buildscript{
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+configure(subprojects - project(":modules")){
+    apply plugin: "java"
+
+    sourceCompatibility = 1.8
+
+    group = "ks"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    defaultTasks("clean", "build")
+
+    dependencies {
+        //testImplementation "junit:junit-4.12"
+        implementation "org.slf4j:slf4j-api:1.7.26"
+        //compile "org.apache.logging.log4j:log4j-to-slf4j:2.11.2"
+        //compile "org.slf4j:jul-to-slf4j:1.7.26"
+    }
+
+    ext {
+        rootLib = file("$rootDir/lib")
+    }
+
+    jar {
+        destinationDirectory = rootLib
+    }
+
+    afterEvaluate {
+        build.doLast {
+            delete buildDir
+        }
+    }
+}

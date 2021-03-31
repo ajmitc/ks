@@ -1,0 +1,7 @@
+description = "Client for KS"
+
+dependencies {
+    //compile project(":modules:common:common-mdl")
+}
+
+apply from: "$rootDir/buildtool/core.gradle"

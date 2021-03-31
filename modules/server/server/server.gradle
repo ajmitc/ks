@@ -1,0 +1,8 @@
+description = "Server for KS"
+
+dependencies {
+    implementation project(":modules:common:common-mdl")
+    implementation 'io.javalin:javalin:3.13.4'
+}
+
+apply from: "$rootDir/buildtool/core.gradle"

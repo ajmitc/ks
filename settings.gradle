@@ -1,0 +1,22 @@
+
+include "modules:common:common-mdl"
+include "modules:server:server"
+include "modules:client:client"
+
+rootProject.name = "kriegsspiel"
+
+def configureGradleBuildFile(project){
+    if (project.children.size() > 0){
+        project.children.each{
+            configureGradleBuildFile(it)
+        }
+    }
+    project.buildFileName = project.name + ".gradle"
+    if (new File(project.buildFileName).exists()){
+        assert project.buildFile.isFile()
+    }
+}
+
+rootProject.children.each {
+    project -> configureGradleBuildFile(project)
+}

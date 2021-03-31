@@ -1,0 +1,22 @@
+
+group = "ks.common"
+
+task sourcesJar(type: Jar){
+    from sourceSets.main.allJava
+    archiveClassifier = "sources"
+}
+
+task javadocJar(type: Jar){
+    from javadoc
+    archiveClassifier = "javadoc"
+}
+
+ext {
+    libraryName = project.name
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()){
+        options.addBooleanOption("html5", true)
+    }
+}
