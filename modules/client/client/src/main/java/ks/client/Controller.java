@@ -41,8 +41,10 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String hostname = view.getLobbyPanel().getTfServerHostname().getText();
-                String port     = view.getLobbyPanel().getTfServerPort().getText();
-                // TODO Attempt to connect to server and update title and Connect button text
+                int port        = Integer.decode(view.getLobbyPanel().getTfServerPort().getText());
+                // Attempt to connect to server and update title and Connect button text
+                model.getServerConnection().connect(hostname, port);
+                view.getLobbyPanel().updateServerConnectedStatus();
             }
         });
     }

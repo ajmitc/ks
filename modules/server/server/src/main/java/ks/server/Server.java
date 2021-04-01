@@ -2,6 +2,10 @@ package ks.server;
 
 import io.javalin.Javalin;
 import io.javalin.http.ForbiddenResponse;
+import ks.common.server.GameList;
+import ks.common.server.protocol.GameListResponse;
+import ks.server.dao.InMemoryStore;
+import ks.server.dao.ServerDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +19,8 @@ public class Server {
     private static Logger logger = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) {
+        ServerDAO serverDAO = new InMemoryStore();
+
         Javalin app = Javalin.create(javalinConfig -> {
             //javalinConfig.addStaticFiles("public");
             javalinConfig.requestLogger((ctx, ms) -> {
@@ -38,9 +44,21 @@ public class Server {
             ctx.status(200);
         });
 
+        app.get("/alive", ctx -> {
+            ctx.status(200);
+        });
+
+        app.get("/game-list", ctx -> {
+            GameListResponse gameListResponse = serverDAO.getGameList();
+            ctx.json(gameListResponse.getObject());
+            ctx.status(gameListResponse.getStatusCode());
+        });
+
+        /*
         app.get("/hello/:name", ctx -> {
             ctx.result("Hello: " + ctx.pathParam("name"));
         });
+         */
 
         /*
         app.routes(() -> {
