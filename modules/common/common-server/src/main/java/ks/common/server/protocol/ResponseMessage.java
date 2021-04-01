@@ -45,4 +45,23 @@ public class ResponseMessage<T> {
     public void setObject(T object) {
         this.object = object;
     }
+
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Response");
+        stringBuilder.append(" Status(");
+        stringBuilder.append(statusCode);
+        stringBuilder.append(") ");
+        if (message != null){
+            stringBuilder.append(" Message(\"");
+            stringBuilder.append(message);
+            stringBuilder.append("\") ");
+        }
+        if (object != null){
+            stringBuilder.append(" Object(");
+            stringBuilder.append(object);
+            stringBuilder.append(") ");
+        }
+        return stringBuilder.toString();
+    }
 }
