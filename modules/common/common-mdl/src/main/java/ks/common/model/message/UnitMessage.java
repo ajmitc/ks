@@ -1,6 +1,8 @@
 package ks.common.model.message;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an order/report sent between a General (User) and Unit/Force
@@ -8,6 +10,12 @@ import java.time.ZonedDateTime;
 public class UnitMessage {
     // Unique ID for this order
     protected String id;
+
+    // Message type (order or report)
+    protected UnitMessageType type = UnitMessageType.ORDER;
+
+    // Message status (pending, en_route, delivered)
+    protected UnitMessageStatus status = UnitMessageStatus.PENDING;
 
     // User that sent the order
     protected String userId;
@@ -28,7 +36,12 @@ public class UnitMessage {
     protected ZonedDateTime createdTimestamp;
 
     // Time when this order was received by the destination unit/force
-    protected ZonedDateTime receivedTimestamp;
+    protected ZonedDateTime deliveryTimestamp;
+
+    // IDs of other UnitMessages that are related to this message
+    // Normally, there would be only one: an Order would be linked to a Report and vice-versa.
+    // It's possible that a single Order may have multiple Reports, or that a many Orders are satisfied with a single Report
+    protected Set<String> linkedMessages = new HashSet<>();
 
     public UnitMessage(){}
 
@@ -38,6 +51,21 @@ public class UnitMessage {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setType(UnitMessageType type) {
+        this.type = type;
+    }
+
+    public UnitMessageType getType() {
+        return type;
+    }
+
+    public void setStatus(UnitMessageStatus status) {
+        this.status = status;
+    }
+    public UnitMessageStatus getStatus() {
+        return status;
     }
 
     public String getUserId() {
@@ -88,11 +116,15 @@ public class UnitMessage {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public ZonedDateTime getReceivedTimestamp() {
-        return receivedTimestamp;
+    public ZonedDateTime getDeliveryTimestamp() {
+        return deliveryTimestamp;
     }
 
-    public void setReceivedTimestamp(ZonedDateTime receivedTimestamp) {
-        this.receivedTimestamp = receivedTimestamp;
+    public void setDeliveryTimestamp(ZonedDateTime deliveryTimestamp) {
+        this.deliveryTimestamp = deliveryTimestamp;
+    }
+
+    public Set<String> getLinkedMessages() {
+        return linkedMessages;
     }
 }

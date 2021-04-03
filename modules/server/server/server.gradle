@@ -3,6 +3,7 @@ description = "Server for KS"
 dependencies {
     implementation project(":modules:common:common-mdl")
     implementation project(":modules:common:common-server")
+    implementation project(":modules:common:common-util")
     compile 'io.javalin:javalin:3.13.4'
 }
 

@@ -19,9 +19,24 @@ public class User {
 
     }
 
+    public User(String name){
+        this(name, null);
+    }
+
     public User(String name, UserRole role){
         this.id = "" + UUID.randomUUID();
         this.displayName = name;
+        this.role = role;
+    }
+
+    /**
+     * Create a new User object, copying the attributes of other, but using the given role
+     * @param other
+     * @param role
+     */
+    public User(User other, UserRole role){
+        this.id = other.id;
+        this.displayName = other.displayName;
         this.role = role;
     }
 

@@ -2,6 +2,7 @@ package ks.client.server;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ks.common.model.game.Game;
 import ks.common.server.protocol.GameListResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,10 @@ public class ServerConnection {
             logger.error("Unable to unpack game list", e);
         }
         return gameListResponse;
+    }
+
+    public void saveGame(Game game){
+
     }
 
     public boolean isConnected(){

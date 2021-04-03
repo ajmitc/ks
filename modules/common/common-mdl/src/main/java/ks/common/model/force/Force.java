@@ -28,8 +28,10 @@ public class Force {
 
     }
 
-    public Force(String sideId){
+    public Force(String id, String sideId, String userId){
+        this.id = id;
         this.sideId = sideId;
+        this.userId = userId;
     }
 
     public String getSideId() {

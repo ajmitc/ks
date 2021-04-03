@@ -1,11 +1,14 @@
 package ks.client.view;
 
 import ks.client.Model;
+import ks.client.util.Util;
 import ks.common.model.game.Game;
+import ks.common.model.side.Side;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.stream.Collectors;
 
 public class LobbyPanel extends JPanel {
     private Model model;
@@ -20,6 +23,7 @@ public class LobbyPanel extends JPanel {
     private JTable tblGameList;
 
     private GameDetailsPanel gameDetailsPanel;
+    private JButton btnJoinGame;
 
     public LobbyPanel(Model model, View view){
         super();
@@ -47,9 +51,17 @@ public class LobbyPanel extends JPanel {
 
         gameDetailsPanel = new GameDetailsPanel();
 
+        btnJoinGame = new JButton("Join");
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(btnJoinGame);
+
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(gameDetailsPanel, BorderLayout.CENTER);
+        centerPanel.add(buttonPanel, BorderLayout.SOUTH);
+
         setLayout(new BorderLayout());
         add(leftPanel, BorderLayout.WEST);
-        add(gameDetailsPanel, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     public JButton getBtnConnectToServer() {
@@ -76,6 +88,10 @@ public class LobbyPanel extends JPanel {
         return gameDetailsPanel;
     }
 
+    public JButton getBtnJoinGame() {
+        return btnJoinGame;
+    }
+
     public void updateServerConnectedStatus(){
         ((TitledBorder) serverConnectPanel.getBorder()).setTitle("Server - " + (model.getServerConnection().isConnected()? "Connected": "Not connected"));
         btnConnectToServer.setText(model.getServerConnection().isConnected()? "Disconnect": "Connect");
@@ -91,16 +107,51 @@ public class LobbyPanel extends JPanel {
         private Game game;
 
         private JLabel titleName;
-        private JTextField tfName;
+        private JLabel name;
+
+        private JLabel titleDesc;
+        private JLabel description;
+
+        private JLabel titleMapName;
+        private JLabel mapName;
+
+        private JLabel titleSides;
+        private JLabel sides;
+
+        private JLabel titleSettings;
+        private JLabel settings;
 
         public GameDetailsPanel(){
             super();
 
             titleName = new JLabel("Name");
-            tfName = new JTextField();
+            name = new JLabel();
+
+            titleDesc = new JLabel("Description");
+            description = new JLabel();
+
+            titleMapName = new JLabel("Map");
+            mapName = new JLabel("");
+
+            titleSides = new JLabel("Sides");
+            sides = new JLabel();
+
+            titleSettings = new JLabel("Settings");
+            settings = new JLabel();
 
             new GridBagLayoutHelper(this, true)
-                    .add(titleName).add(tfName).nextRow()
+                    .add(titleName).add(name).nextRow()
+                    .setGridWidth(2)
+                    .add(titleDesc).nextRow()
+                    .add(description).nextRow()
+                    .resetGridWidth()
+                    .add(titleMapName).add(mapName).nextRow()
+                    .setGridWidth(2)
+                    .add(titleSides).nextRow()
+                    .add(sides).nextRow()
+                    .add(titleSettings).nextRow()
+                    .add(settings).nextRow()
+                    .resetGridWidth()
                     ;
         }
 
@@ -108,10 +159,41 @@ public class LobbyPanel extends JPanel {
             this.game = game;
         }
 
+        public Game getGame() {
+            return game;
+        }
+
         public void refresh(){
             if (game == null)
                 return;
-            tfName.setText(game.getName());
+            name.setText(game.getName());
+            description.setText(game.getCommonDescription());
+            mapName.setText(game.getBattlefield().getMapName());
+            sides.setText(formatSides());
+            settings.setText(formatSettings());
+        }
+
+        private String formatSides(){
+            StringBuilder sb = new StringBuilder();
+            sb.append("<html>");
+            for (Side side: game.getSides()) {
+                sb.append("<b>");
+                sb.append(side.getName());
+                sb.append("</b> (");
+                sb.append(Util.getColorName(side.getColor()));
+                sb.append(") [");
+                sb.append(side.getUserIds().stream().collect(Collectors.joining(", ")));
+                sb.append(" ]");
+                sb.append("<br/>");
+            }
+            sb.append("</html>");
+            return sb.toString();
+        }
+
+        private String formatSettings(){
+            StringBuilder sb = new StringBuilder();
+
+            return sb.toString();
         }
     }
 }

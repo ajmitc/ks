@@ -1,6 +1,7 @@
 
 include "modules:common:common-mdl"
 include "modules:common:common-server"
+include "modules:common:common-util"
 include "modules:server:server"
 include "modules:client:client"
 

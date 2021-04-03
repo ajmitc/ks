@@ -56,7 +56,8 @@ public class Unit {
 
     }
 
-    public Unit(String sideId, String forceId, String name, UnitType unitType){
+    public Unit(String id, String sideId, String forceId, String name, UnitType unitType){
+        this.id = id;
         this.sideId = sideId;
         this.forceId = forceId;
         this.id = "" + UUID.randomUUID();
