@@ -26,6 +26,15 @@ public class UmpireGamePanel extends JPanel {
     }
 
     public void refresh(){
+        mapPanel.refresh();
+        messagePanel.refresh();
+    }
 
+    public UmpireMapPanel getMapPanel() {
+        return mapPanel;
+    }
+
+    public MessagePanel getMessagePanel() {
+        return messagePanel;
     }
 }

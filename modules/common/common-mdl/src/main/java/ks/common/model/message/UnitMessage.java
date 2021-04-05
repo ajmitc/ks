@@ -3,6 +3,7 @@ package ks.common.model.message;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Represents an order/report sent between a General (User) and Unit/Force
@@ -33,7 +34,7 @@ public class UnitMessage {
     protected String content;
 
     // Time when this order was created/sent
-    protected ZonedDateTime createdTimestamp;
+    protected ZonedDateTime createdTimestamp = ZonedDateTime.now();
 
     // Time when this order was received by the destination unit/force
     protected ZonedDateTime deliveryTimestamp;
@@ -44,6 +45,16 @@ public class UnitMessage {
     protected Set<String> linkedMessages = new HashSet<>();
 
     public UnitMessage(){}
+
+    public UnitMessage(UnitMessageType type, String sourceId, String destForceId, String subject, String content){
+        this.id = "" + UUID.randomUUID();
+        this.type = type;
+        this.userId = sourceId;
+        this.destForceId = destForceId;
+        this.subject = subject;
+        this.content = content;
+        this.createdTimestamp = ZonedDateTime.now();
+    }
 
     public String getId() {
         return id;

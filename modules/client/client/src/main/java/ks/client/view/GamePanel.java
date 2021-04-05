@@ -57,4 +57,12 @@ public class GamePanel extends JPanel {
     public void showGeneralPanel(){
         ((CardLayout) getLayout()).show(this, UserRole.GENERAL.name());
     }
+
+    public GeneralGamePanel getGeneralGamePanel() {
+        return generalGamePanel;
+    }
+
+    public UmpireGamePanel getUmpireGamePanel() {
+        return umpireGamePanel;
+    }
 }

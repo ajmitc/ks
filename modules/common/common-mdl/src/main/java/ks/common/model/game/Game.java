@@ -15,7 +15,7 @@ public class Game {
     private String id;
 
     // Current game status
-    private GameStatus status;
+    private GameStatus status = GameStatus.PENDING;
 
     // Display name for this game
     private String name;

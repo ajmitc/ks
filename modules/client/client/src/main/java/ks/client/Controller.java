@@ -7,6 +7,11 @@ import ks.common.model.force.Force;
 import ks.common.model.game.Game;
 import ks.common.model.game.GameStatus;
 import ks.common.model.game.OpenRoleDescription;
+import ks.common.model.message.UnitMessage;
+import ks.common.model.message.UnitMessageStatus;
+import ks.common.model.message.UnitMessageType;
+import ks.common.model.side.Side;
+import ks.common.model.terrain.Battlefield;
 import ks.common.model.user.User;
 import ks.common.model.user.UserRole;
 import ks.common.server.protocol.GameListResponse;
@@ -18,11 +23,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import java.util.UUID;
 
 public class Controller {
     private static Logger logger = LoggerFactory.getLogger(Controller.class);
@@ -45,7 +52,34 @@ public class Controller {
         this.view.getMainMenuPanel().getBtnNewLocalGame().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                UserRole role = UserRole.UMPIRE;
+                Game game = new Game("Local");
+                game.getUsers().add(model.getMe());
+                game.setBattlefield(new Battlefield(100, 100));
+                game.setCommonDescription("Common Description");
 
+                Side sideA = new Side("" + UUID.randomUUID(), "Side A", Color.BLUE);
+                Side sideB = new Side("" + UUID.randomUUID(), "Side B", Color.RED);
+                game.getSides().add(sideA);
+                game.getSides().add(sideB);
+
+                Force forceA = new Force("" + UUID.randomUUID(), sideA.getId(), null);
+                Force forceB = new Force("" + UUID.randomUUID(), sideB.getId(), null);
+                game.getForces().add(forceA);
+                game.getForces().add(forceB);
+
+                UnitMessage message = new UnitMessage(UnitMessageType.ORDER, model.getMe().getId(), forceA.getId(), "New Order", "That is an order!");
+                message.setStatus(UnitMessageStatus.PENDING);
+                game.getActiveMessages().add(message);
+
+                message = new UnitMessage(UnitMessageType.ORDER, model.getMe().getId(), forceB.getId(), "Delivered Order", "Order has been delivered!");
+                message.setStatus(UnitMessageStatus.DELIVERED);
+                game.getActiveMessages().add(message);
+
+                model.setCurrentGame(game);
+                view.getGamePanel().showPanel(role);
+                view.showGame();
+                view.getGamePanel().refresh();
             }
         });
 
@@ -137,7 +171,7 @@ public class Controller {
                 game.getUsers().add(new User(model.getMe(), UserRole.OBSERVER));
             }
             else {
-                // TODO If game is NOT in-progress (pending), ask what role they want
+                // If game is NOT in-progress (pending), ask what role they want
                 List<OpenRoleDescription> openRoleDescriptions = game.getOpenRoles();
                 if (openRoleDescriptions.size() == 1){
                     // Ask user if they want to join this role

@@ -50,7 +50,8 @@ public class MessagePanel extends JPanel {
     private User user;
 
     private PendingOrdersTableModel pendingOrdersTableModel;
-    private JTable tblPendingOrders;
+    private DeliveredOrdersTableModel deliveredOrdersTableModel;
+    private PendingOrdersTable tblPendingOrders;
     private JTable tblDeliveredOrders;
     private JTable tblEnRouteMessages;
     private JTable tblDeliveredMessages;
@@ -62,8 +63,12 @@ public class MessagePanel extends JPanel {
         this.view = view;
 
         pendingOrdersTableModel = new PendingOrdersTableModel();
-        tblPendingOrders = new JTable(pendingOrdersTableModel);
-        tblDeliveredOrders = new JTable();
+        deliveredOrdersTableModel = new DeliveredOrdersTableModel();
+
+        tblPendingOrders = new PendingOrdersTable(model, view, pendingOrdersTableModel);
+        tblDeliveredOrders = new JTable(deliveredOrdersTableModel);
+        tblEnRouteMessages = new JTable();
+        tblDeliveredMessages = new JTable();
 
         add(new JScrollPane(tblPendingOrders));
         add(new JScrollPane(tblDeliveredOrders));
@@ -72,7 +77,8 @@ public class MessagePanel extends JPanel {
     }
 
     public void refresh(){
-
+        pendingOrdersTableModel.update(model.getCurrentGame().getActiveMessages());
+        deliveredOrdersTableModel.update(model.getCurrentGame().getActiveMessages());
     }
 
     public User getUser() {
@@ -81,5 +87,9 @@ public class MessagePanel extends JPanel {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public PendingOrdersTable getPendingOrdersTable() {
+        return tblPendingOrders;
     }
 }
