@@ -3,6 +3,7 @@ package ks.client.view.umpire;
 import ks.common.model.message.UnitMessage;
 import ks.common.model.message.UnitMessageStatus;
 import ks.common.model.message.UnitMessageType;
+import ks.common.model.user.User;
 import ks.common.util.CommonUtil;
 
 import javax.swing.*;
@@ -22,6 +23,12 @@ public class DeliveredOrdersTableModel extends AbstractTableModel {
             "" // Send button
     };
     private List<UnitMessage> messages = new ArrayList<>();
+    private User user;
+
+    public DeliveredOrdersTableModel(User user){
+        super();
+        this.user = user;
+    }
 
     public UnitMessage getRowAt(int row){
         if (messages != null && messages.size() > row)
@@ -75,7 +82,7 @@ public class DeliveredOrdersTableModel extends AbstractTableModel {
         int currentSize = messages.size();
         for (UnitMessage activeMessage: activeMessages) {
             // Only accept messages that are ORDERS and PENDING
-            if (activeMessage.getType() == UnitMessageType.ORDER && activeMessage.getStatus() == UnitMessageStatus.DELIVERED) {
+            if (activeMessage.getType() == UnitMessageType.ORDER && activeMessage.getStatus() == UnitMessageStatus.DELIVERED && activeMessage.getUserId().equals(user.getId())) {
                 // Check to see if this message is in our list
                 boolean found = false;
                 for (UnitMessage message : messages) {

@@ -53,8 +53,15 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 UserRole role = UserRole.UMPIRE;
+
+                User userA = new User("General A", UserRole.GENERAL);
+                User userB = new User("General B", UserRole.GENERAL);
+
                 Game game = new Game("Local");
                 game.getUsers().add(model.getMe());
+                game.getUsers().add(userA);
+                game.getUsers().add(userB);
+
                 game.setBattlefield(new Battlefield(100, 100));
                 game.setCommonDescription("Common Description");
 
@@ -63,8 +70,8 @@ public class Controller {
                 game.getSides().add(sideA);
                 game.getSides().add(sideB);
 
-                Force forceA = new Force("" + UUID.randomUUID(), sideA.getId(), null);
-                Force forceB = new Force("" + UUID.randomUUID(), sideB.getId(), null);
+                Force forceA = new Force("" + UUID.randomUUID(), sideA.getId(), userA.getId());
+                Force forceB = new Force("" + UUID.randomUUID(), sideB.getId(), userB.getId());
                 game.getForces().add(forceA);
                 game.getForces().add(forceB);
 
@@ -77,6 +84,7 @@ public class Controller {
                 game.getActiveMessages().add(message);
 
                 model.setCurrentGame(game);
+                view.getGamePanel().init();
                 view.getGamePanel().showPanel(role);
                 view.showGame();
                 view.getGamePanel().refresh();
@@ -206,6 +214,7 @@ public class Controller {
         // open the gamepanel in whatever role they currently have
         model.setCurrentGame(game);
         UserRole role = game.getUsers().stream().filter(user -> user.getId().equals(model.getMe().getId())).map(user -> user.getRole()).findFirst().get();
+        view.getGamePanel().init();
         view.getGamePanel().showPanel(role);
         view.showGame();
         view.getGamePanel().refresh();

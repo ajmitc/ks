@@ -28,6 +28,10 @@ public class GamePanel extends JPanel {
         add(generalGamePanel, UserRole.GENERAL.name());
     }
 
+    public void init(){
+        umpireGamePanel.init();
+    }
+
     public void refresh(){
         if (showingUmpirePanel)
             umpireGamePanel.refresh();

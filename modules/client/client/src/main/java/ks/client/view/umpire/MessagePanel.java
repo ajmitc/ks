@@ -62,8 +62,8 @@ public class MessagePanel extends JPanel {
         this.model = model;
         this.view = view;
 
-        pendingOrdersTableModel = new PendingOrdersTableModel();
-        deliveredOrdersTableModel = new DeliveredOrdersTableModel();
+        pendingOrdersTableModel = new PendingOrdersTableModel(user);
+        deliveredOrdersTableModel = new DeliveredOrdersTableModel(user);
 
         tblPendingOrders = new PendingOrdersTable(model, view, pendingOrdersTableModel);
         tblDeliveredOrders = new JTable(deliveredOrdersTableModel);
