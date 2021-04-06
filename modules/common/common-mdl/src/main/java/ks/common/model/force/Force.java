@@ -1,5 +1,6 @@
 package ks.common.model.force;
 
+import ks.common.model.message.MessageRecipient;
 import ks.common.model.unit.Unit;
 
 import java.util.ArrayList;
@@ -11,9 +12,12 @@ import java.util.List;
  * There may be multiple Forces on a Side, with each Force controlled by a different user.  Furthermore, a user
  * may break up his force into multiple sub-forces to command groups of units.
  */
-public class Force {
+public class Force implements MessageRecipient {
     // Unique ID for this force
     private String id;
+
+    // Name of force
+    private String name;
 
     // Side this force belongs to
     private String sideId;
@@ -32,6 +36,7 @@ public class Force {
         this.id = id;
         this.sideId = sideId;
         this.userId = userId;
+        this.name = this.id.substring(0, 5);
     }
 
     public String getId() {
@@ -40,6 +45,14 @@ public class Force {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSideId() {

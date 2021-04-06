@@ -21,11 +21,9 @@ public class UnitMessage {
     // User that sent the order
     protected String userId;
 
-    // ID of destination Unit
-    protected String destUnitId;
-
-    // ID of destination force
-    protected String destForceId;
+    // destination Unit/Force
+    // If the type == REPORT, then this is the source of the message and the userId is the destination
+    protected String recipientId;
 
     // Optional message subject
     protected String subject;
@@ -46,11 +44,11 @@ public class UnitMessage {
 
     public UnitMessage(){}
 
-    public UnitMessage(UnitMessageType type, String sourceId, String destForceId, String subject, String content){
+    public UnitMessage(UnitMessageType type, String userId, String recipientId, String subject, String content){
         this.id = "" + UUID.randomUUID();
         this.type = type;
-        this.userId = sourceId;
-        this.destForceId = destForceId;
+        this.userId = userId;
+        this.recipientId = recipientId;
         this.subject = subject;
         this.content = content;
         this.createdTimestamp = ZonedDateTime.now();
@@ -87,20 +85,12 @@ public class UnitMessage {
         this.userId = userId;
     }
 
-    public String getDestUnitId() {
-        return destUnitId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
-    public void setDestUnitId(String destUnitId) {
-        this.destUnitId = destUnitId;
-    }
-
-    public String getDestForceId() {
-        return destForceId;
-    }
-
-    public void setDestForceId(String destForceId) {
-        this.destForceId = destForceId;
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 
     public String getSubject() {

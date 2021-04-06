@@ -75,11 +75,11 @@ public class Controller {
                 game.getForces().add(forceA);
                 game.getForces().add(forceB);
 
-                UnitMessage message = new UnitMessage(UnitMessageType.ORDER, model.getMe().getId(), forceA.getId(), "New Order", "That is an order!");
+                UnitMessage message = new UnitMessage(UnitMessageType.ORDER, userA.getId(), forceA.getId(), "New Order", "That is an order!");
                 message.setStatus(UnitMessageStatus.PENDING);
                 game.getActiveMessages().add(message);
 
-                message = new UnitMessage(UnitMessageType.ORDER, model.getMe().getId(), forceB.getId(), "Delivered Order", "Order has been delivered!");
+                message = new UnitMessage(UnitMessageType.ORDER, userB.getId(), forceB.getId(), "Delivered Order", "Order has been delivered!");
                 message.setStatus(UnitMessageStatus.DELIVERED);
                 game.getActiveMessages().add(message);
 

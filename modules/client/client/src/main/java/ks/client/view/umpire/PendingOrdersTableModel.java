@@ -1,5 +1,7 @@
 package ks.client.view.umpire;
 
+import ks.client.Model;
+import ks.common.model.message.MessageRecipient;
 import ks.common.model.message.UnitMessage;
 import ks.common.model.message.UnitMessageStatus;
 import ks.common.model.message.UnitMessageType;
@@ -21,12 +23,13 @@ public class PendingOrdersTableModel extends AbstractTableModel {
             "Submitted",
             "" // Send button
     };
+    private Model model;
     private List<UnitMessage> messages = new ArrayList<>();
     private User user;
 
-    public PendingOrdersTableModel(User user){
+    public PendingOrdersTableModel(Model model){
         super();
-        this.user = user;
+        this.model = model;
     }
 
     public UnitMessage getRowAt(int row){
@@ -51,11 +54,12 @@ public class PendingOrdersTableModel extends AbstractTableModel {
         UnitMessage message = messages.get(row);
         switch (col){
             case 0: // Destination
-                return message.getDestUnitId() != null? "Unit " + message.getDestUnitId(): "Force " + message.getDestForceId();
+                MessageRecipient messageRecipient = model.getCurrentGame().findMessageRecipient(message.getRecipientId());
+                return "<html>" + messageRecipient.getName() + "</html>";
             case 1: // Message
-                return message.getContent();
+                return "<html>" + message.getContent() + "</html>";
             case 2: // Submitted Time
-                return CommonUtil.formatDateTime(message.getCreatedTimestamp());
+                return "<html>" + CommonUtil.formatDateTime(message.getCreatedTimestamp()) + "</html>";
             case 3: // Send button
                 return "Send";
         }
@@ -111,5 +115,13 @@ public class PendingOrdersTableModel extends AbstractTableModel {
             return;
         messages.remove(row);
         fireTableRowsDeleted(row, row);
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

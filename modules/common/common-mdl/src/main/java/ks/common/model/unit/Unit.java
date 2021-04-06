@@ -1,5 +1,6 @@
 package ks.common.model.unit;
 
+import ks.common.model.message.MessageRecipient;
 import ks.common.model.unit.action.UnitAction;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.UUID;
 /**
  * Represents a single unit on the map
  */
-public class Unit {
+public class Unit implements MessageRecipient {
     // Unique ID for this unit
     private String id;
 

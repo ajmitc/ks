@@ -6,30 +6,29 @@ import ks.common.model.message.UnitMessage;
 import ks.common.model.message.UnitMessageStatus;
 import ks.common.model.message.UnitMessageType;
 import ks.common.model.user.User;
+import ks.common.util.CommonUtil;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This table shows the Umpire all messages that the General has submitted.
  * The Umpire uses this table to tell the Messenger where to deliver the message.
  */
-public class DeliveredOrdersTableModel extends AbstractTableModel {
+public class EnRouteMessagesTableModel extends AbstractTableModel {
     private String[] columnNames = new String[]{
+            "Source",
             "Destination",
             "Message",
-            "Report",
-            "" // Send button
+            "Sent",
+            "ETA"
     };
     private Model model;
     private List<UnitMessage> messages = new ArrayList<>();
-    private Map<String, String> pendingReports = new HashMap<>();
     private User user;
 
-    public DeliveredOrdersTableModel(Model model){
+    public EnRouteMessagesTableModel(Model model){
         super();
         this.model = model;
     }
@@ -37,12 +36,6 @@ public class DeliveredOrdersTableModel extends AbstractTableModel {
     public UnitMessage getRowAt(int row){
         if (messages != null && messages.size() > row)
             return messages.get(row);
-        return null;
-    }
-
-    public String getReportForMessage(String messageId){
-        if (pendingReports.containsKey(messageId))
-            return pendingReports.get(messageId);
         return null;
     }
 
@@ -60,28 +53,33 @@ public class DeliveredOrdersTableModel extends AbstractTableModel {
 
     public Object getValueAt(int row, int col) {
         UnitMessage message = messages.get(row);
+        MessageRecipient messageRecipient = model.getCurrentGame().findMessageRecipient(message.getRecipientId());
         switch (col){
-            case 0: // Destination
-                MessageRecipient messageRecipient = model.getCurrentGame().findMessageRecipient(message.getRecipientId());
-                return "<html>" + messageRecipient.getName() + "</html>";
-            case 1: // Message
+            case 0: // Source
+                if (message.getType() == UnitMessageType.ORDER) {
+                    return "<html>HQ</html>";
+                }
+                else {
+                    return "<html>" + messageRecipient.getName() + "</html>";
+                }
+            case 1: // Destination
+                if (message.getType() == UnitMessageType.ORDER) {
+                    return "<html>" + messageRecipient.getName() + "</html>";
+                }
+                else{
+                    return "<html>HQ</html>";
+                }
+            case 2: // Message
                 return "<html>" + message.getContent() + "</html>";
-            case 2: // Report Text Area
-                return pendingReports.containsKey(message.getId())? pendingReports.get(message.getId()): "";
-            case 3: // Send button
-                return "Send";
+            case 3: // Sent Time
+                return "<html>" + CommonUtil.formatDateTime(message.getCreatedTimestamp()) + "</html>";
+            case 4: // ETA
+                // TODO How is this estimated?
+                //return "<html>" + CommonUtil.formatDateTime(message.getDeliveryTimestamp()) + "</html>";
+                return "";
         }
         return "";
     }
-
-    public void setValueAt(Object value, int row, int col) {
-        UnitMessage message = messages.get(row);
-        if (col == 2){
-            pendingReports.put(message.getId(), "" + value);
-            fireTableCellUpdated(row, col);
-        }
-    }
-
 
     public Class getColumnClass(int c) {
         if (messages.isEmpty())
@@ -94,14 +92,14 @@ public class DeliveredOrdersTableModel extends AbstractTableModel {
      * editable.
      */
     public boolean isCellEditable(int row, int col) {
-        return col >= 2;
+        return false;
     }
 
     public void update(List<UnitMessage> activeMessages) {
         int currentSize = messages.size();
         for (UnitMessage activeMessage: activeMessages) {
             // Only accept messages that are ORDERS and PENDING
-            if (activeMessage.getType() == UnitMessageType.ORDER && activeMessage.getStatus() == UnitMessageStatus.DELIVERED && activeMessage.getUserId().equals(user.getId())) {
+            if (activeMessage.getStatus() == UnitMessageStatus.EN_ROUTE && activeMessage.getUserId().equals(user.getId())) {
                 // Check to see if this message is in our list
                 boolean found = false;
                 for (UnitMessage message : messages) {
@@ -124,9 +122,13 @@ public class DeliveredOrdersTableModel extends AbstractTableModel {
 
     public void removeMessage(UnitMessage message){
         int row = messages.indexOf(message);
+        removeRow(row);
+    }
+
+    public void removeRow(int row){
         if (row < 0)
             return;
-        messages.remove(message);
+        messages.remove(row);
         fireTableRowsDeleted(row, row);
     }
 

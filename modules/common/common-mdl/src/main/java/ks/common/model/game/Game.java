@@ -1,9 +1,12 @@
 package ks.common.model.game;
 
 import ks.common.model.force.Force;
+import ks.common.model.message.MessageRecipient;
 import ks.common.model.message.UnitMessage;
 import ks.common.model.side.Side;
 import ks.common.model.terrain.Battlefield;
+import ks.common.model.unit.Messenger;
+import ks.common.model.unit.Unit;
 import ks.common.model.user.User;
 import ks.common.model.user.UserRole;
 
@@ -34,6 +37,9 @@ public class Game {
 
     // List of all forces involved
     private List<Force> forces = new ArrayList<>();
+
+    // List of all Messengers currently delivering messages
+    private List<Messenger> messengers = new ArrayList<>();
 
     // List of all users playing this game
     private List<User> users = new ArrayList<>();
@@ -76,6 +82,25 @@ public class Game {
             }
         }
         return openRoles;
+    }
+
+    public Force findForce(String id){
+        for (Force force: forces){
+            if (force.getId().equals(id))
+                return force;
+        }
+        return null;
+    }
+
+    public Unit findUnit(String id){
+        for (Force force: forces){
+            for (Unit unit: force.getUnits()){
+                if (unit.getId().equals(id)) {
+                    return unit;
+                }
+            }
+        }
+        return null;
     }
 
     public String getId() {
@@ -134,9 +159,27 @@ public class Game {
         this.sides = sides;
     }
 
+    /**
+     * Get Side by name
+     * @param name
+     * @return
+     */
     public Side getSideByName(String name){
         for (Side side: sides) {
             if (side.getName().equalsIgnoreCase(name))
+                return side;
+        }
+        return null;
+    }
+
+    /**
+     * Get Side controlled by User
+     * @param userId
+     * @return
+     */
+    public Side getUsersSide(String userId){
+        for (Side side: sides) {
+            if (side.getUserIds().contains(userId))
                 return side;
         }
         return null;
@@ -148,6 +191,14 @@ public class Game {
 
     public void setForces(List<Force> forces) {
         this.forces = forces;
+    }
+
+    public List<Messenger> getMessengers() {
+        return messengers;
+    }
+
+    public void setMessengers(List<Messenger> messengers) {
+        this.messengers = messengers;
     }
 
     public List<User> getUsers() {
@@ -172,5 +223,15 @@ public class Game {
 
     public List<UnitMessage> getDeliveredMessages() {
         return deliveredMessages;
+    }
+
+    public MessageRecipient findMessageRecipient(String recipientId){
+        Unit unit = findUnit(recipientId);
+        if (unit != null)
+            return unit;
+        Force force = findForce(recipientId);
+        if (force != null)
+            return force;
+        return null;
     }
 }

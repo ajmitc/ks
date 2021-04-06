@@ -49,12 +49,21 @@ public class MessagePanel extends JPanel {
 
     private User user;
 
+    private JLabel lblUser;
+    private JLabel lblPendingOrders;
+    private JLabel lblDeliveredOrders;
+    private JLabel lblEnRouteOrders;
+    private JLabel lblDeliveredMessages;
+
     private PendingOrdersTableModel pendingOrdersTableModel;
     private DeliveredOrdersTableModel deliveredOrdersTableModel;
+    private EnRouteMessagesTableModel enRouteMessagesTableModel;
+    private DeliveredMessagesTableModel deliveredMessagesTableModel;
+
     private PendingOrdersTable tblPendingOrders;
-    private JTable tblDeliveredOrders;
-    private JTable tblEnRouteMessages;
-    private JTable tblDeliveredMessages;
+    private DeliveredOrdersTable tblDeliveredOrders;
+    private EnRouteMessagesTable tblEnRouteMessages;
+    private DeliveredMessagesTable tblDeliveredMessages;
 
     public MessagePanel(Model model, View view){
         super();
@@ -62,23 +71,38 @@ public class MessagePanel extends JPanel {
         this.model = model;
         this.view = view;
 
-        pendingOrdersTableModel = new PendingOrdersTableModel(user);
-        deliveredOrdersTableModel = new DeliveredOrdersTableModel(user);
+        lblUser = new JLabel();
+        lblPendingOrders     = new JLabel("Submitted Orders");
+        lblDeliveredOrders   = new JLabel("Orders Delivered");
+        lblEnRouteOrders     = new JLabel("Messages En-route");
+        lblDeliveredMessages = new JLabel("Messages Delivered");
 
-        tblPendingOrders = new PendingOrdersTable(model, view, pendingOrdersTableModel);
-        tblDeliveredOrders = new JTable(deliveredOrdersTableModel);
-        tblEnRouteMessages = new JTable();
-        tblDeliveredMessages = new JTable();
+        pendingOrdersTableModel     = new PendingOrdersTableModel(model);
+        deliveredOrdersTableModel   = new DeliveredOrdersTableModel(model);
+        enRouteMessagesTableModel   = new EnRouteMessagesTableModel(model);
+        deliveredMessagesTableModel = new DeliveredMessagesTableModel(model);
 
+        tblPendingOrders     = new PendingOrdersTable(model, view, pendingOrdersTableModel);
+        tblDeliveredOrders   = new DeliveredOrdersTable(model, view, deliveredOrdersTableModel);
+        tblEnRouteMessages   = new EnRouteMessagesTable(model, view, enRouteMessagesTableModel);
+        tblDeliveredMessages = new DeliveredMessagesTable(model, view, deliveredMessagesTableModel);
+
+        add(lblUser);
+        add(lblPendingOrders);
         add(new JScrollPane(tblPendingOrders));
+        add(lblDeliveredOrders);
         add(new JScrollPane(tblDeliveredOrders));
+        add(lblEnRouteOrders);
         add(new JScrollPane(tblEnRouteMessages));
+        add(lblDeliveredMessages);
         add(new JScrollPane(tblDeliveredMessages));
     }
 
     public void refresh(){
         pendingOrdersTableModel.update(model.getCurrentGame().getActiveMessages());
         deliveredOrdersTableModel.update(model.getCurrentGame().getActiveMessages());
+        enRouteMessagesTableModel.update(model.getCurrentGame().getActiveMessages());
+        deliveredMessagesTableModel.update(model.getCurrentGame().getActiveMessages());
     }
 
     public User getUser() {
@@ -87,6 +111,10 @@ public class MessagePanel extends JPanel {
 
     public void setUser(User user) {
         this.user = user;
+        pendingOrdersTableModel.setUser(user);
+        deliveredOrdersTableModel.setUser(user);
+
+        lblUser.setText(user.getDisplayName());
     }
 
     public PendingOrdersTable getPendingOrdersTable() {
