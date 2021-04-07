@@ -8,7 +8,9 @@ import ks.common.model.unit.Unit;
 import ks.common.model.unit.UnitType;
 import ks.common.model.user.User;
 import ks.common.model.user.UserRole;
+import ks.common.server.BattlefieldList;
 import ks.common.server.GameList;
+import ks.common.server.protocol.BattlefieldListResponse;
 import ks.common.server.protocol.GameListResponse;
 
 import java.awt.*;
@@ -16,13 +18,21 @@ import java.util.UUID;
 
 public class InMemoryStore implements ServerDAO {
     private GameList gameList = new GameList();
+    private BattlefieldList battlefieldList = new BattlefieldList();
 
     public InMemoryStore(){
         addTestGame();
+        addTestBattlefield();
     }
 
+    @Override
     public GameListResponse getGameList(){
         return new GameListResponse(gameList);
+    }
+
+    @Override
+    public BattlefieldListResponse getBattlefieldList() {
+        return new BattlefieldListResponse(battlefieldList);
     }
 
     @Override
@@ -74,5 +84,14 @@ public class InMemoryStore implements ServerDAO {
         game.getForces().get(1).getUnits().add(new Unit("" + UUID.randomUUID(), sideBId, forceBId, "2st Infantry", UnitType.INFANTRY));
 
         gameList.getGames().add(game);
+    }
+
+    private void addTestBattlefield(){
+        Battlefield battlefield = new Battlefield(100, 100);
+        battlefield.setId("test");
+        battlefield.setMapName("Test Map");
+        battlefield.setBackgroundImageUrlCallback("/battlefield?id=test");
+
+        battlefieldList.getBattlefields().add(battlefield);
     }
 }

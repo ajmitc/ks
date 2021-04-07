@@ -1,9 +1,13 @@
-package ks.client.view;
+package ks.client.view.util;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ViewUtil {
+    public static final String FONT_NAME = "Serif";
+    public static final Font DEFAULT_FONT = new Font(FONT_NAME, Font.PLAIN, 12);
+    public static final Font TITLE_FONT = new Font(FONT_NAME, Font.BOLD, 14);
+
     public static void popupNotify(String message){
         JOptionPane.showMessageDialog(null, message);
     }

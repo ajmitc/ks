@@ -2,7 +2,7 @@ package ks.client.view.umpire;
 
 import ks.client.Model;
 import ks.client.view.View;
-import ks.client.view.ViewUtil;
+import ks.client.view.util.ViewUtil;
 import ks.client.view.util.ButtonColumn;
 import ks.common.model.message.UnitMessage;
 import ks.common.model.message.UnitMessageStatus;

@@ -1,11 +1,15 @@
 package ks.common.model.terrain;
 
 import java.awt.image.BufferedImage;
+import java.util.UUID;
 
 /**
  * Represents the entire battlefield on which the users play
  */
 public class Battlefield {
+    // Unique ID for this battlefield
+    private String id;
+
     // Human-readable name for the map
     private String mapName;
 
@@ -20,6 +24,8 @@ public class Battlefield {
     private TerrainPlot[][] plots;
 
     public Battlefield(int width, int height){
+        this.id = "" + UUID.randomUUID();
+
         plots = new TerrainPlot[height][width];
 
         for (int x = 0; x < width; ++x){
@@ -27,6 +33,14 @@ public class Battlefield {
                 plots[y][x] = new TerrainPlot(x, y);
             }
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMapName() {

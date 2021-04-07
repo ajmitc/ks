@@ -1,6 +1,8 @@
 package ks.client.view;
 
 import ks.client.Model;
+import ks.client.view.util.FieldLabel;
+import ks.client.view.util.TitleLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,13 +31,13 @@ public class GameCreatorPanel extends JPanel {
         this.model = model;
         this.view = view;
 
-        tfGameName = new JTextField();
+        tfGameName = new JTextField(10);
         taCommonDescription = new JTextArea();
         taSideADescription = new JTextArea();
         taSideBDescription = new JTextArea();
         cbBattlefield = new JComboBox();
-        tfSideAName = new JTextField();
-        tfSideBName = new JTextField();
+        tfSideAName = new JTextField(10);
+        tfSideBName = new JTextField(10);
         cbSideAColor = new JComboBox();
         cbSideBColor = new JComboBox();
         listAllForces = new JList();
@@ -44,60 +46,80 @@ public class GameCreatorPanel extends JPanel {
         btnCreate = new JButton("Create");
         btnCancel = new JButton("Cancel");
 
+        tfGameName.setText("Local Game");
+
+        taCommonDescription.setColumns(30);
+        taCommonDescription.setRows(10);
+
+        taSideADescription.setColumns(15);
+        taSideADescription.setRows(8);
+
+        taSideBDescription.setColumns(15);
+        taSideBDescription.setRows(8);
+
         cbSideAColor.addItem("Blue");
         cbSideAColor.addItem("Red");
 
         cbSideBColor.addItem("Red");
         cbSideBColor.addItem("Blue");
 
-        JLabel lblTitle = new JLabel("Create Game");
-        JLabel lblName = new JLabel("Game Name");
-        JLabel lblCommonDesc = new JLabel("Common Description");
-        JLabel lblSideADesc = new JLabel("Side A Description");
-        JLabel lblSideBDesc = new JLabel("Side B Description");
-        JLabel lblBattlefield = new JLabel("Battlefield");
-        JLabel lblSideAName = new JLabel("Side A Name");
-        JLabel lblSideBName = new JLabel("Side B Name");
-        JLabel lblSideAUnits = new JLabel("Side A Units");
-        JLabel lblSideBUnits = new JLabel("Side B Units");
+        listAllForces.setVisibleRowCount(10);
+        sideAForces.setVisibleRowCount(10);
+        sideBForces.setVisibleRowCount(10);
+
+        JLabel lblTitle = new TitleLabel("Create Game");
+        JLabel lblName = new FieldLabel("Game Name");
+        JLabel lblCommonDesc = new FieldLabel("Common Description");
+        JLabel lblSideADesc = new FieldLabel("Side A Description");
+        JLabel lblSideBDesc = new FieldLabel("Side B Description");
+        JLabel lblBattlefield = new FieldLabel("Battlefield");
+        JLabel lblSideAName = new FieldLabel("Side A Name");
+        JLabel lblSideBName = new FieldLabel("Side B Name");
+        JLabel lblSideAUnits = new FieldLabel("Side A Units");
+        JLabel lblSideBUnits = new FieldLabel("Side B Units");
 
         JPanel commonPanel = new JPanel();
         JPanel sideAPanel = new JPanel();
         JPanel sideBPanel = new JPanel();
 
         new GridBagLayoutHelper(commonPanel, true)
+                .setAnchor(GridBagConstraints.NORTHWEST)
                 .setGridWidth(2)
                 .add(lblTitle).nextRow()
                 .resetGridWidth()
                 .add(lblName).add(tfGameName).nextRow()
                 .setGridWidth(2)
                 .add(lblCommonDesc).nextRow()
-                .add(taCommonDescription).nextRow()
+                .add(new JScrollPane(taCommonDescription)).nextRow()
                 .add(lblBattlefield).nextRow()
                 .add(cbBattlefield).nextRow()
                 ;
 
         new GridBagLayoutHelper(sideAPanel, true)
+                .setAnchor(GridBagConstraints.NORTHWEST)
                 .add(lblSideAName).add(tfSideAName).add(cbSideAColor).nextRow()
                 .setGridWidth(3)
                 .add(lblSideADesc).nextRow()
-                .add(taSideADescription).nextRow()
+                .add(new JScrollPane(taSideADescription)).nextRow()
                 .add(lblSideAUnits).nextRow()
-                .add(sideAForces).nextRow()
+                .add(new JScrollPane(sideAForces)).nextRow()
                 ;
 
         new GridBagLayoutHelper(sideBPanel, true)
+                .setAnchor(GridBagConstraints.NORTHWEST)
                 .add(lblSideBName).add(tfSideBName).add(cbSideBColor).nextRow()
                 .setGridWidth(3)
                 .add(lblSideBDesc).nextRow()
-                .add(taSideBDescription).nextRow()
+                .add(new JScrollPane(taSideBDescription)).nextRow()
                 .add(lblSideBUnits).nextRow()
-                .add(sideBForces).nextRow()
+                .add(new JScrollPane(sideBForces)).nextRow()
         ;
 
         JPanel contentpane = new JPanel();
         new GridBagLayoutHelper(contentpane, true)
+                .setGridWidth(2)
                 .add(commonPanel).nextRow()
+                .resetGridWidth()
                 .add(sideAPanel).add(sideBPanel).nextRow()
                 ;
 

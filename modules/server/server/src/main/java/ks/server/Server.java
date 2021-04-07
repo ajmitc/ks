@@ -5,6 +5,7 @@ import io.javalin.Javalin;
 import io.javalin.http.ForbiddenResponse;
 import ks.common.model.game.Game;
 import ks.common.server.GameList;
+import ks.common.server.protocol.BattlefieldListResponse;
 import ks.common.server.protocol.GameListResponse;
 import ks.server.dao.InMemoryStore;
 import ks.server.dao.ServerDAO;
@@ -67,6 +68,19 @@ public class Server {
             GameListResponse gameListResponse = serverDAO.getGameList();
             ctx.json(gameListResponse.getObject());
             ctx.status(gameListResponse.getStatusCode());
+        });
+
+        app.get("/battlefield-list", ctx -> {
+            BattlefieldListResponse battlefieldListResponse = serverDAO.getBattlefieldList();
+            ctx.json(battlefieldListResponse.getObject());
+            ctx.status(battlefieldListResponse.getStatusCode());
+        });
+
+        app.get("/battlefield", ctx -> {
+            String bfid = ctx.queryParam("id");
+            BattlefieldListResponse battlefieldListResponse = serverDAO.getBattlefieldList();
+            ctx.json(battlefieldListResponse.getObject());
+            ctx.status(battlefieldListResponse.getStatusCode());
         });
 
         app.post("/save-game", ctx -> {

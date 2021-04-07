@@ -1,10 +1,9 @@
 package ks.client;
 
 import ks.client.server.LocalServerProcess;
-import ks.client.view.GameCreatorDialog;
 import ks.client.view.GameListTableModel;
 import ks.client.view.View;
-import ks.client.view.ViewUtil;
+import ks.client.view.util.ViewUtil;
 import ks.common.model.force.Force;
 import ks.common.model.game.Game;
 import ks.common.model.game.GameStatus;
@@ -25,7 +24,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
