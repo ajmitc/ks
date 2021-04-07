@@ -113,6 +113,8 @@ public class MessagePanel extends JPanel {
         this.user = user;
         pendingOrdersTableModel.setUser(user);
         deliveredOrdersTableModel.setUser(user);
+        enRouteMessagesTableModel.setUser(user);
+        deliveredMessagesTableModel.setUser(user);
 
         lblUser.setText(user.getDisplayName());
     }

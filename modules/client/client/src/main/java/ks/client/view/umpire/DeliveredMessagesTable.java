@@ -13,5 +13,6 @@ public class DeliveredMessagesTable extends JTable {
         super(tableModel);
         this.model = model;
         this.view = view;
+        setRowHeight(getRowHeight() + 40);
     }
 }

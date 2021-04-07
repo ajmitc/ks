@@ -7,6 +7,7 @@ import java.awt.*;
 
 public class View {
     private static final String MAINMENU = "mainmenu";
+    private static final String CREATE_LOCAL_GAME = "createlocal";
     private static final String LOBBY = "lobby";
     private static final String GAME = "game";
 
@@ -14,6 +15,7 @@ public class View {
     private JFrame frame;
 
     private MainMenuPanel mainMenuPanel;
+    private GameCreatorPanel gameCreatorPanel;
     private LobbyPanel lobbyPanel;
     private GamePanel gamePanel;
 
@@ -26,26 +28,36 @@ public class View {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setTitle("Kriegsspiel");
 
-        mainMenuPanel = new MainMenuPanel(model, this);
-        lobbyPanel    = new LobbyPanel(model, this);
-        gamePanel     = new GamePanel(model, this);
+        mainMenuPanel    = new MainMenuPanel(model, this);
+        gameCreatorPanel = new GameCreatorPanel(model, this);
+        lobbyPanel       = new LobbyPanel(model, this);
+        gamePanel        = new GamePanel(model, this);
 
         this.frame.getContentPane().setLayout(new CardLayout());
         this.frame.getContentPane().add(mainMenuPanel, MAINMENU);
+        this.frame.getContentPane().add(gameCreatorPanel, CREATE_LOCAL_GAME);
         this.frame.getContentPane().add(lobbyPanel, LOBBY);
         this.frame.getContentPane().add(gamePanel, GAME);
     }
 
     public void showMainMenu(){
-        ((CardLayout) this.frame.getContentPane().getLayout()).show(this.frame.getContentPane(), MAINMENU);
+        showCard(MAINMENU);
+    }
+
+    public void showCreateLocalGame(){
+        showCard(CREATE_LOCAL_GAME);
     }
 
     public void showLobby(){
-        ((CardLayout) this.frame.getContentPane().getLayout()).show(this.frame.getContentPane(), LOBBY);
+        showCard(LOBBY);
     }
 
     public void showGame(){
-        ((CardLayout) this.frame.getContentPane().getLayout()).show(this.frame.getContentPane(), GAME);
+        showCard(GAME);
+    }
+
+    private void showCard(String name){
+        ((CardLayout) this.frame.getContentPane().getLayout()).show(this.frame.getContentPane(), name);
     }
 
     public JFrame getFrame() {
@@ -62,5 +74,9 @@ public class View {
 
     public GamePanel getGamePanel() {
         return gamePanel;
+    }
+
+    public GameCreatorPanel getGameCreatorPanel() {
+        return gameCreatorPanel;
     }
 }

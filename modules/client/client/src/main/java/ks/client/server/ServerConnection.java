@@ -28,20 +28,26 @@ public class ServerConnection {
         return restConnection.connect();
     }
 
-    public GameListResponse getGameList(){
-        String response = restConnection.get("/game-list");
+    public GameListResponse getGameList() throws Exception{
+        RestConnection.RestResponse response = restConnection.get("/game-list");
+        if (response.getStatusCode() != 200){
+            throw new RuntimeException("Failed to get game list (status " + response.getStatusCode() + "): " + response.getBody());
+        }
         GameListResponse gameListResponse = null;
         try {
-            gameListResponse = objectMapper.readValue(response, new TypeReference<GameListResponse>() {});
+            gameListResponse = objectMapper.readValue(response.getBody(), new TypeReference<GameListResponse>() {});
         }
         catch (Exception e){
             logger.error("Unable to unpack game list", e);
+            throw e;
         }
         return gameListResponse;
     }
 
     public void saveGame(Game game){
-
+        RestConnection.RestResponse response = restConnection.post("/save-game", game);
+        if (response.getStatusCode() != 200)
+            throw new RuntimeException("Failed to save game (status " + response.getStatusCode() + "): " + response.getBody());
     }
 
     public boolean isConnected(){

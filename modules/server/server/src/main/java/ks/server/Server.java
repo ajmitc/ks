@@ -1,7 +1,9 @@
 package ks.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.ForbiddenResponse;
+import ks.common.model.game.Game;
 import ks.common.server.GameList;
 import ks.common.server.protocol.GameListResponse;
 import ks.server.dao.InMemoryStore;
@@ -19,14 +21,27 @@ public class Server {
     private static Logger logger = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) {
+        int port = 7000;
+
+        for (String arg: args){
+            try {
+                port = Integer.decode(arg);
+            }
+            catch (Exception e){
+                logger.warn("Invalid port value");
+            }
+        }
+
         ServerDAO serverDAO = new InMemoryStore();
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         Javalin app = Javalin.create(javalinConfig -> {
             //javalinConfig.addStaticFiles("public");
             javalinConfig.requestLogger((ctx, ms) -> {
                 logger.info(ctx.method() + " " + ctx.url() + " " + ms + "milliseconds");
             });
-        }).start(7000);
+        }).start(port);
 
         // Runs before EVERY request
         app.before(ctx -> {
@@ -52,6 +67,12 @@ public class Server {
             GameListResponse gameListResponse = serverDAO.getGameList();
             ctx.json(gameListResponse.getObject());
             ctx.status(gameListResponse.getStatusCode());
+        });
+
+        app.post("/save-game", ctx -> {
+            Game game = objectMapper.readValue(ctx.body(), Game.class);
+            boolean saved = serverDAO.saveGame(game);
+            ctx.status(saved? 200: 500);
         });
 
         /*

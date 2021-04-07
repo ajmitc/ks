@@ -1,5 +1,7 @@
 package ks.client;
 
+import ks.client.server.LocalServerProcess;
+import ks.client.view.GameCreatorDialog;
 import ks.client.view.GameListTableModel;
 import ks.client.view.View;
 import ks.client.view.ViewUtil;
@@ -28,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,49 +48,33 @@ public class Controller {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                // TODO Stop threads (ie. server)
+                try {
+                    LocalServerProcess.stop();
+                }
+                catch (Exception ex){
+                    logger.error("Failed to stop local server process", ex);
+                }
             }
         });
 
         this.view.getMainMenuPanel().getBtnNewLocalGame().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                UserRole role = UserRole.UMPIRE;
+                view.showCreateLocalGame();
+            }
+        });
 
-                User userA = new User("General A", UserRole.GENERAL);
-                User userB = new User("General B", UserRole.GENERAL);
+        this.view.getGameCreatorPanel().getBtnCreate().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                startLocalGame();
+            }
+        });
 
-                Game game = new Game("Local");
-                game.getUsers().add(model.getMe());
-                game.getUsers().add(userA);
-                game.getUsers().add(userB);
-
-                game.setBattlefield(new Battlefield(100, 100));
-                game.setCommonDescription("Common Description");
-
-                Side sideA = new Side("" + UUID.randomUUID(), "Side A", Color.BLUE);
-                Side sideB = new Side("" + UUID.randomUUID(), "Side B", Color.RED);
-                game.getSides().add(sideA);
-                game.getSides().add(sideB);
-
-                Force forceA = new Force("" + UUID.randomUUID(), sideA.getId(), userA.getId());
-                Force forceB = new Force("" + UUID.randomUUID(), sideB.getId(), userB.getId());
-                game.getForces().add(forceA);
-                game.getForces().add(forceB);
-
-                UnitMessage message = new UnitMessage(UnitMessageType.ORDER, userA.getId(), forceA.getId(), "New Order", "That is an order!");
-                message.setStatus(UnitMessageStatus.PENDING);
-                game.getActiveMessages().add(message);
-
-                message = new UnitMessage(UnitMessageType.ORDER, userB.getId(), forceB.getId(), "Delivered Order", "Order has been delivered!");
-                message.setStatus(UnitMessageStatus.DELIVERED);
-                game.getActiveMessages().add(message);
-
-                model.setCurrentGame(game);
-                view.getGamePanel().init();
-                view.getGamePanel().showPanel(role);
-                view.showGame();
-                view.getGamePanel().refresh();
+        this.view.getGameCreatorPanel().getBtnCancel().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                view.showMainMenu();
             }
         });
 
@@ -108,14 +95,18 @@ public class Controller {
                 view.getLobbyPanel().updateServerConnectedStatus();
 
                 if (model.getServerConnection().isConnected()){
-                    GameListResponse gameListResponse = model.getServerConnection().getGameList();
-                    if (gameListResponse.getStatusCode() == ResponseMessage.OK){
-                        // Populate game list in lobby
-                        model.setAvailableGames(gameListResponse.getObject());
-                        view.getLobbyPanel().updateGameList();
+                    try {
+                        GameListResponse gameListResponse = model.getServerConnection().getGameList();
+                        if (gameListResponse.getStatusCode() == ResponseMessage.OK) {
+                            // Populate game list in lobby
+                            model.setAvailableGames(gameListResponse.getObject());
+                            view.getLobbyPanel().updateGameList();
+                        } else {
+                            logger.error("Unable to get game list: " + gameListResponse);
+                        }
                     }
-                    else {
-                        logger.error("Unable to get game list: " + gameListResponse);
+                    catch (Exception e){
+                        logger.error("Unable to get game list: " + e);
                     }
                 }
             }
@@ -151,6 +142,65 @@ public class Controller {
                 joinGame();
             }
         });
+    }
+
+    /**
+     * Create and start the local game
+     */
+    public void startLocalGame() {
+        // Run server in process
+        try {
+            LocalServerProcess.start();
+        }
+        catch (IOException ioe){
+            logger.error("Failed to start local server process", ioe);
+            return;
+        }
+
+        // Create Game object
+        User userA = new User("General A", UserRole.GENERAL);
+        User userB = new User("General B", UserRole.GENERAL);
+
+        Game game = new Game(view.getGameCreatorPanel().getTfGameName().getText());
+        game.getUsers().add(model.getMe());
+        game.getUsers().add(userA);
+        game.getUsers().add(userB);
+
+        // TODO Get from GameCreatorPanel
+        game.setBattlefield(new Battlefield(100, 100));
+
+        game.setCommonDescription(view.getGameCreatorPanel().getTaCommonDescription().getText());
+
+        Side sideA = new Side("" + UUID.randomUUID(), view.getGameCreatorPanel().getTfSideAName().getText(), ViewUtil.toColor("" + view.getGameCreatorPanel().getCbSideAColor().getSelectedItem()));
+        Side sideB = new Side("" + UUID.randomUUID(), view.getGameCreatorPanel().getTfSideBName().getText(), ViewUtil.toColor("" + view.getGameCreatorPanel().getCbSideBColor().getSelectedItem()));
+        game.getSides().add(sideA);
+        game.getSides().add(sideB);
+
+        Force forceA = new Force("" + UUID.randomUUID(), sideA.getId(), userA.getId());
+        Force forceB = new Force("" + UUID.randomUUID(), sideB.getId(), userB.getId());
+        game.getForces().add(forceA);
+        game.getForces().add(forceB);
+
+        // TODO Add units from GameCreatorPanel
+
+        UnitMessage message = new UnitMessage(UnitMessageType.ORDER, userA.getId(), forceA.getId(), "New Order", "That is an order!");
+        message.setStatus(UnitMessageStatus.PENDING);
+        game.getActiveMessages().add(message);
+
+        message = new UnitMessage(UnitMessageType.ORDER, userB.getId(), forceB.getId(), "Delivered Order", "Order has been delivered!");
+        message.setDelivered();
+        game.getActiveMessages().add(message);
+
+        // TODO Send game to server
+
+        // Join game as Umpire
+        UserRole role = UserRole.UMPIRE;
+
+        model.setCurrentGame(game);
+        view.getGamePanel().init();
+        view.getGamePanel().showPanel(role);
+        view.showGame();
+        view.getGamePanel().refresh();
     }
 
     /**

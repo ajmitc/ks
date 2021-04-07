@@ -1,5 +1,7 @@
 package ks.client.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,6 +25,8 @@ public class RestConnection {
 
     private HttpClient httpClient;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     public RestConnection(){
 
     }
@@ -44,7 +48,7 @@ public class RestConnection {
         return connected;
     }
 
-    public String get(String path){
+    public RestResponse get(String path){
         final HttpGet httpGet = new HttpGet(buildUrl(path));
         HttpResponse response = null;
         try {
@@ -73,17 +77,20 @@ public class RestConnection {
             }
             stringBuilder.append(line);
         }
-        return stringBuilder.toString();
+        return new RestResponse(response.getStatusLine().getStatusCode(), stringBuilder.toString());
     }
 
-    public String post(String path){
+    public RestResponse post(String path, Object body){
         final HttpPost httpPost = new HttpPost(buildUrl(path));
 
         StringEntity input = null;
         try {
-            input = new StringEntity("id");
+            input = new StringEntity(objectMapper.writeValueAsString(body));
         } catch (UnsupportedEncodingException ex) {
             logger.error("Exception caught while building POST call", ex);
+        }
+        catch (JsonProcessingException jpe){
+            logger.error("Exception caught while building POST call", jpe);
         }
         httpPost.setEntity(input);
 
@@ -112,7 +119,7 @@ public class RestConnection {
             stringBuilder.append(line);
         }
 
-        return stringBuilder.toString();
+        return new RestResponse(response.getStatusLine().getStatusCode(), stringBuilder.toString());
     }
 
     private String buildUrl(String path){
@@ -139,5 +146,31 @@ public class RestConnection {
 
     public boolean isConnected() {
         return connected;
+    }
+
+    public static class RestResponse{
+        private int statusCode;
+        private String body;
+
+        public RestResponse(int statusCode, String body){
+            this.statusCode = statusCode;
+            this.body = body;
+        }
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        public void setStatusCode(int statusCode) {
+            this.statusCode = statusCode;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public void setBody(String body) {
+            this.body = body;
+        }
     }
 }

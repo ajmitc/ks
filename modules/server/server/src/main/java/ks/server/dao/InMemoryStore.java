@@ -25,6 +25,12 @@ public class InMemoryStore implements ServerDAO {
         return new GameListResponse(gameList);
     }
 
+    @Override
+    public boolean saveGame(Game game) {
+        gameList.getGames().add(game);
+        return true;
+    }
+
     private void addTestGame(){
         Game game = new Game();
         game.setId("" + UUID.randomUUID());

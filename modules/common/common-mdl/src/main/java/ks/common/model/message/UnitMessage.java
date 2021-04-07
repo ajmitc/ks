@@ -73,6 +73,12 @@ public class UnitMessage {
     public void setStatus(UnitMessageStatus status) {
         this.status = status;
     }
+
+    public void setDelivered(){
+        setStatus(UnitMessageStatus.DELIVERED);
+        setDeliveryTimestamp(ZonedDateTime.now());
+    }
+
     public UnitMessageStatus getStatus() {
         return status;
     }

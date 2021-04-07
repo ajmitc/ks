@@ -54,5 +54,6 @@ public class DeliveredOrdersTable extends JTable {
         };
         ButtonColumn buttonColumn = new ButtonColumn(this, buttonAction, 3);
         //buttonColumn.setMnemonic(KeyEvent.VK_D);
+
     }
 }
