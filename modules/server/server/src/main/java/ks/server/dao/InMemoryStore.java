@@ -90,6 +90,7 @@ public class InMemoryStore implements ServerDAO {
         Battlefield battlefield = new Battlefield(100, 100);
         battlefield.setId("test");
         battlefield.setMapName("Test Map");
+        battlefield.setImageFilename("Test.png");
         battlefield.setBackgroundImageUrlCallback("/battlefield?id=test");
 
         battlefieldList.getBattlefields().add(battlefield);

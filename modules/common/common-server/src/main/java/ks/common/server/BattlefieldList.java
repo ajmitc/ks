@@ -1,20 +1,18 @@
 package ks.common.server;
 
-import ks.common.model.terrain.Battlefield;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class BattlefieldList {
-    private List<Battlefield> battlefields = new ArrayList<>();
+    private List<BattlefieldInfo> battlefields = new ArrayList<>();
 
     public BattlefieldList(){}
 
-    public List<Battlefield> getBattlefields() {
+    public List<BattlefieldInfo> getBattlefields() {
         return battlefields;
     }
 
-    public void setBattlefields(List<Battlefield> battlefields) {
+    public void setBattlefields(List<BattlefieldInfo> battlefields) {
         this.battlefields = battlefields;
     }
 }

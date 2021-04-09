@@ -106,5 +106,14 @@ public class ImageUtil {
         return rotated;
     }
 
+    public static BufferedImage scaleWidth(BufferedImage img, int newWidth){
+        int iw = img.getWidth(null);
+        int ih = img.getHeight(null);
+        double scale = ((double) newWidth) / ((double) iw);
+        int newHeight = (int) (ih * scale);
+        BufferedImage bi = toBufferedImage(img.getScaledInstance(newWidth, newHeight, BufferedImage.SCALE_SMOOTH));
+        return bi;
+    }
+
     private ImageUtil(){}
 }

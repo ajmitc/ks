@@ -2,17 +2,14 @@ package ks.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
-import io.javalin.http.ForbiddenResponse;
 import ks.common.model.game.Game;
-import ks.common.server.GameList;
-import ks.common.server.protocol.BattlefieldListResponse;
 import ks.common.server.protocol.GameListResponse;
 import ks.server.dao.InMemoryStore;
 import ks.server.dao.ServerDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.javalin.apibuilder.ApiBuilder.path;
+import java.util.List;
 
 /**
  * Start a Javalin server
@@ -70,18 +67,36 @@ public class Server {
             ctx.status(gameListResponse.getStatusCode());
         });
 
+        // TODO The client should already have the necessary map-packs
+        // TODO The server may allow a client to download a map-pack, but it shouldn't try to load it while creating a game
+        // TODO When a client joins a game, the client app should check to see if the required map-pack is available
+        /*
         app.get("/battlefield-list", ctx -> {
-            BattlefieldListResponse battlefieldListResponse = serverDAO.getBattlefieldList();
-            ctx.json(battlefieldListResponse.getObject());
-            ctx.status(battlefieldListResponse.getStatusCode());
+            BattlefieldList battlefieldList = new BattlefieldList();
+            for (MapPackInfo mapPackInfo: MapPackManager.getAvailableMapPacks()){
+                for (MapPackManifest.MapInfo mapInfo: mapPackInfo.getManifest().getMaps()) {
+                    BattlefieldInfo info = new BattlefieldInfo(mapInfo.getId(), mapInfo.getName());
+                    battlefieldList.getBattlefields().add(info);
+                }
+            }
+            ctx.json(battlefieldList);
+            ctx.status(200);
         });
 
         app.get("/battlefield", ctx -> {
             String bfid = ctx.queryParam("id");
+            for (MapPackInfo mapPackInfo: MapPackManager.getAvailableMapPacks()){
+                for (MapPackManifest.MapInfo mapInfo: mapPackInfo.getManifest().getMaps()) {
+                    if (mapInfo.getId().equalsIgnoreCase(bfid)){
+
+                    }
+                }
+            }
             BattlefieldListResponse battlefieldListResponse = serverDAO.getBattlefieldList();
             ctx.json(battlefieldListResponse.getObject());
             ctx.status(battlefieldListResponse.getStatusCode());
         });
+         */
 
         app.post("/save-game", ctx -> {
             Game game = objectMapper.readValue(ctx.body(), Game.class);

@@ -1,0 +1,19 @@
+{
+  "maps": [
+    {
+      "id": "test",
+      "name": "Test Map",
+      "directory": "test",
+      "images": [
+        {
+          "filename": "TestMap.png",
+          "gridx": 0,
+          "gridy": 0
+        }
+      ],
+      "width": 100,
+      "height": 100,
+      "terrain-file": "terrain.json"
+    }
+  ]
+}

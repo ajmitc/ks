@@ -13,6 +13,9 @@ public class Battlefield {
     // Human-readable name for the map
     private String mapName;
 
+    // Filename of image
+    private String imageFilename;
+
     // Image displayed on background
     private BufferedImage backgroundImage;
 
@@ -49,6 +52,14 @@ public class Battlefield {
 
     public void setMapName(String mapName) {
         this.mapName = mapName;
+    }
+
+    public String getImageFilename() {
+        return imageFilename;
+    }
+
+    public void setImageFilename(String imageFilename) {
+        this.imageFilename = imageFilename;
     }
 
     public BufferedImage getBackgroundImage() {

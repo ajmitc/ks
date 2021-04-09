@@ -2,6 +2,7 @@
 include "modules:common:common-mdl"
 include "modules:common:common-server"
 include "modules:common:common-util"
+include "modules:common:map-pack"
 include "modules:server:server"
 include "modules:client:client"
 
