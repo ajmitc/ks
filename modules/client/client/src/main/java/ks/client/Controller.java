@@ -1,7 +1,10 @@
 package ks.client;
 
+import ks.client.map_pack.MapPackInfo;
+import ks.client.map_pack.MapPackManifest;
 import ks.client.server.LocalServerProcess;
 import ks.client.view.GameListTableModel;
+import ks.client.view.ImageUtil;
 import ks.client.view.View;
 import ks.client.view.util.ViewUtil;
 import ks.common.model.force.Force;
@@ -41,6 +44,8 @@ public class Controller {
     public Controller(Model model, View view){
         this.model = model;
         this.view = view;
+
+        model.loadMapPacks();
 
         this.view.getFrame().addWindowListener(new WindowAdapter() {
             @Override
@@ -259,12 +264,28 @@ public class Controller {
             // Save the game
             model.getServerConnection().saveGame(game);
         }
+
         // open the gamepanel in whatever role they currently have
         model.setCurrentGame(game);
+        loadBattlefieldBackgroundImage();
         UserRole role = game.getUsers().stream().filter(user -> user.getId().equals(model.getMe().getId())).map(user -> user.getRole()).findFirst().get();
         view.getGamePanel().init();
         view.getGamePanel().showPanel(role);
         view.showGame();
         view.getGamePanel().refresh();
+    }
+
+    private void loadBattlefieldBackgroundImage(){
+        String mapPackId = model.getCurrentGame().getBattlefield().getMapPackId();
+        MapPackInfo mapPackInfo = model.getMapPackInfo(mapPackId);
+        for (MapPackManifest.MapInfo mapInfo: mapPackInfo.getManifest().getMaps()){
+            for (MapPackManifest.ImageInfo imageInfo: mapInfo.getImages()){
+                ImageUtil.get(imageInfo.getFilename());
+            }
+        }
+    }
+
+    private String generateBattlefieldImageFilename(Game game){
+        return game.getBattlefield().getId();
     }
 }

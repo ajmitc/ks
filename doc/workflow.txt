@@ -1,0 +1,19 @@
+Kriegsspiel Workflow
+
+== Remote Server Connection ==
+Server                  Client
+   |
+   |                      |
+   |                      User clicks "Connect to Remote Server", view shows Lobby
+   |                      User enters Server host and port and clicks Connect
+   |  <-----------------> Get Game List and populate Lobby
+   |                      User selects game and clicks Join Game - Client determines Role based on whether game is in-progress or not
+   |                      View displays Game Panel, formatted for User's role
+
+
+== Local Game ==
+Server                  Client
+                          |
+                          User clicks "New Local Game"
+     <------------------- Start Server
+   |                      |

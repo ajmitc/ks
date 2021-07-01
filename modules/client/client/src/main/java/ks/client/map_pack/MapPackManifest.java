@@ -5,7 +5,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class MapPackManifest {
+    // ID of this map pack (ie. waterloo-400x600)
+    private String id;
+
+    // Human-readable name for this map (ie. Waterloo)
+    private String name;
+
+    // Map info
     private List<MapInfo> maps;
+
+    public MapPackManifest(){}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public List<MapInfo> getMaps() {
         return maps;

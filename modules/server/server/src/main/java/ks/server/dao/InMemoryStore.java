@@ -8,6 +8,7 @@ import ks.common.model.unit.Unit;
 import ks.common.model.unit.UnitType;
 import ks.common.model.user.User;
 import ks.common.model.user.UserRole;
+import ks.common.server.BattlefieldInfo;
 import ks.common.server.BattlefieldList;
 import ks.common.server.GameList;
 import ks.common.server.protocol.BattlefieldListResponse;
@@ -47,8 +48,7 @@ public class InMemoryStore implements ServerDAO {
         game.setName("Test Game");
         game.setCommonDescription("This is the common description shared with all players");
         game.setBattlefield(new Battlefield(100, 100));
-        game.getBattlefield().setMapName("Waterloo");
-        game.getBattlefield().setBackgroundImageUrlCallback("/image/TestMap.png");
+        game.getBattlefield().setMapPackId("test-map-pack");
 
         String sideAId = "" + UUID.randomUUID();
         String sideBId = "" + UUID.randomUUID();
@@ -87,12 +87,12 @@ public class InMemoryStore implements ServerDAO {
     }
 
     private void addTestBattlefield(){
-        Battlefield battlefield = new Battlefield(100, 100);
-        battlefield.setId("test");
-        battlefield.setMapName("Test Map");
-        battlefield.setImageFilename("Test.png");
-        battlefield.setBackgroundImageUrlCallback("/battlefield?id=test");
+        BattlefieldInfo battlefieldInfo = new BattlefieldInfo();
+        battlefieldInfo.setId("test");
+        battlefieldInfo.setName("Test Map");
+        //battlefieldInfo.setImageFilename("Test.png");
+        //battlefieldInfo.setBackgroundImageUrlCallback("/battlefield?id=test");
 
-        battlefieldList.getBattlefields().add(battlefield);
+        battlefieldList.getBattlefields().add(battlefieldInfo);
     }
 }

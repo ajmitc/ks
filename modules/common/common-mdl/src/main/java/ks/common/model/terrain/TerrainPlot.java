@@ -2,6 +2,8 @@ package ks.common.model.terrain;
 
 /**
  * Represents a single "chunk" of land on the Battlefield.
+ *
+ * This data is loaded from the terrain file in the map-pack
  */
 public class TerrainPlot {
     // Location of this plot

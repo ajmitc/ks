@@ -1,6 +1,5 @@
 package ks.common.model.terrain;
 
-import java.awt.image.BufferedImage;
 import java.util.UUID;
 
 /**
@@ -10,18 +9,8 @@ public class Battlefield {
     // Unique ID for this battlefield
     private String id;
 
-    // Human-readable name for the map
-    private String mapName;
-
-    // Filename of image
-    private String imageFilename;
-
-    // Image displayed on background
-    private BufferedImage backgroundImage;
-
-    // URL to download the background image from the server to the client
-    // Server should never populate backgroundImage above, only this URL callback.
-    private String backgroundImageUrlCallback;
+    // ID of map-pack to use
+    private String mapPackId;
 
     // Logical subsections of map
     private TerrainPlot[][] plots;
@@ -46,42 +35,18 @@ public class Battlefield {
         this.id = id;
     }
 
-    public String getMapName() {
-        return mapName;
+    public String getMapPackId() {
+        return mapPackId;
     }
 
-    public void setMapName(String mapName) {
-        this.mapName = mapName;
-    }
-
-    public String getImageFilename() {
-        return imageFilename;
-    }
-
-    public void setImageFilename(String imageFilename) {
-        this.imageFilename = imageFilename;
-    }
-
-    public BufferedImage getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    public void setBackgroundImage(BufferedImage backgroundImage) {
-        this.backgroundImage = backgroundImage;
+    public void setMapPackId(String mapPackId) {
+        this.mapPackId = mapPackId;
     }
 
     public TerrainPlot getPlot(int x, int y){
         if (x < 0 || y < 0 || y >= plots.length || x >= plots[0].length)
             return null;
         return plots[y][x];
-    }
-
-    public String getBackgroundImageUrlCallback() {
-        return backgroundImageUrlCallback;
-    }
-
-    public void setBackgroundImageUrlCallback(String backgroundImageUrlCallback) {
-        this.backgroundImageUrlCallback = backgroundImageUrlCallback;
     }
 
     public TerrainPlot[][] getPlots() {

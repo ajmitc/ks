@@ -13,7 +13,7 @@ public class UmpireGamePanel extends JPanel {
     private Model model;
     private View view;
 
-    private UmpireMapPanel mapPanel;
+    private UmpireMapToolsPanel mapToolsPanel;
     private MessagePanel leftMessagePanel;
     private MessagePanel rightMessagePanel;
 
@@ -22,11 +22,11 @@ public class UmpireGamePanel extends JPanel {
         this.model = model;
         this.view = view;
 
-        mapPanel = new UmpireMapPanel(model, view);
+        mapToolsPanel = new UmpireMapToolsPanel(model, view);
         leftMessagePanel = new MessagePanel(model, view);
         rightMessagePanel = new MessagePanel(model, view);
 
-        add(mapPanel, BorderLayout.CENTER);
+        add(mapToolsPanel, BorderLayout.CENTER);
         add(leftMessagePanel, BorderLayout.WEST);
         add(rightMessagePanel, BorderLayout.EAST);
     }
@@ -47,13 +47,13 @@ public class UmpireGamePanel extends JPanel {
     }
 
     public void refresh(){
-        mapPanel.refresh();
+        mapToolsPanel.refresh();
         leftMessagePanel.refresh();
         rightMessagePanel.refresh();
     }
 
-    public UmpireMapPanel getMapPanel() {
-        return mapPanel;
+    public UmpireMapToolsPanel getMapToolsPanel() {
+        return mapToolsPanel;
     }
 
     public MessagePanel getLeftMessagePanel() {

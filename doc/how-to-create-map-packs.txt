@@ -1,0 +1,14 @@
+To create a map pack:
+
+In a directory, create these three files:
+- image (directory)
+- terrain.txt
+- manifest.json
+
+In the image directory, place the map images.
+
+Once done, create the jar:
+
+> zip -r <map-pack-name>.jar *
+
+Move <map-pack-name>.jar to ~/ks/map-packs/
