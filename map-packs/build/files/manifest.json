@@ -1,0 +1,17 @@
+{
+    "id": "test-map-pack",
+    "name": "My Map",
+    "maps": [
+        "id": "test-map",
+        "name": "Test Map",
+        "directory": "image",
+        "images": [{
+            "filename": "TestMap.png",
+            "gridx": 0,
+            "gridy": 0
+        }],
+        "width": 640,
+        "height": 400,
+        "terrain-file": "terrain.txt"
+    ]
+}

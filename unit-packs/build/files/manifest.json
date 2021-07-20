@@ -1,0 +1,29 @@
+{
+    "id": "test-unit-pack",
+    "name": "Prussian Units",
+    "specs": "unit-specs.json",
+    "units": [
+        {
+            "id": "hussar-red",
+            "directory": "image",
+            "image": {
+                "filename": "units.jpg",
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+            }
+        },
+        {
+            "id": "hussar-blue",
+            "directory": "image",
+            "image": {
+                "filename": "units.jpg",
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+            }
+        }
+    ]
+}

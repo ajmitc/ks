@@ -25,6 +25,7 @@ public class Unit implements MessageRecipient {
 
     // Type of unit
     private UnitType unitType;
+    private UnitType unitSubType; // may be null if not applicable
 
     // Unit location on map
     private int x;
@@ -35,6 +36,11 @@ public class Unit implements MessageRecipient {
 
     // Unit's stance (Hold, Defensive, Offensive)
     private UnitStance stance;
+
+    // Line, Column, Square, Skirmish
+    private Formation formation;
+
+    private UnitSize size;
 
     // How far can this unit see?
     private int visibilityDistanceMeters;
@@ -53,18 +59,34 @@ public class Unit implements MessageRecipient {
     // the unit will begin executing the next action, if any.
     private List<UnitAction> actions = new ArrayList<>();
 
+    // Maximum number of men for this unit
+    // For example, an infantry half-battalion has 900 men
+    private int maxStrength;
+
+    // Current number of men in this unit
+    private int strength;
+
     public Unit(){
 
     }
 
-    public Unit(String id, String sideId, String forceId, String name, UnitType unitType){
+    public Unit(String id, String sideId, String forceId, String name, UnitType unitType, UnitSize size, int strength){
+        this(id, sideId, forceId, name, unitType, null, size, strength);
+    }
+
+    public Unit(String id, String sideId, String forceId, String name, UnitType unitType, UnitType unitSubType, UnitSize size, int strength){
         this.id = id;
         this.sideId = sideId;
         this.forceId = forceId;
         this.id = "" + UUID.randomUUID();
         this.name = name;
         this.unitType = unitType;
+        this.unitSubType = unitSubType;
+        this.size = size;
         this.status = UnitStatus.READY;
+        this.formation = Formation.LINE;
+        this.strength = strength;
+        this.maxStrength = strength;
     }
 
     public String getId() {
@@ -97,6 +119,22 @@ public class Unit implements MessageRecipient {
 
     public void setUnitType(UnitType unitType) {
         this.unitType = unitType;
+    }
+
+    public UnitType getUnitSubType() {
+        return unitSubType;
+    }
+
+    public void setUnitSubType(UnitType unitSubType) {
+        this.unitSubType = unitSubType;
+    }
+
+    public UnitSize getSize() {
+        return size;
+    }
+
+    public void setSize(UnitSize size) {
+        this.size = size;
     }
 
     public String getSideId() {
@@ -177,5 +215,29 @@ public class Unit implements MessageRecipient {
 
     public void setActions(List<UnitAction> actions) {
         this.actions = actions;
+    }
+
+    public Formation getFormation() {
+        return formation;
+    }
+
+    public void setFormation(Formation formation) {
+        this.formation = formation;
+    }
+
+    public int getMaxStrength() {
+        return maxStrength;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void adjStrength(int amount) {
+        this.strength += amount;
     }
 }

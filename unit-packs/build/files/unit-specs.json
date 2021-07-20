@@ -1,0 +1,32 @@
+{
+    "hussar-red": {
+        "name": "Hussar",
+        "type": "CAVALRY",
+        "subtype": "LIGHT_CAVALRY",
+        "size": "SQUADRON",
+        "visibilityDistanceMeters": 0,
+        "minAttackRangeMeters": 0,
+        "maxAttackRangeMeters": 0,
+        "speedMetersPerSecond": 0
+    },
+    "hussar-blue": {
+        "name": "Hussar",
+        "type": "CAVALRY",
+        "subtype": "LIGHT_CAVALRY",
+        "size": "SQUADRON",
+        "visibilityDistanceMeters": 0,
+        "minAttackRangeMeters": 0,
+        "maxAttackRangeMeters": 0,
+        "speedMetersPerSecond": 0
+    },
+    "infantry-half-battalion-red": {
+        "name": "Infantry Half-Battalion",
+        "type": "INFANTRY",
+        "subtype": "",
+        "size": "HALF_BATTALION",
+        "visibilityDistanceMeters": 0,
+        "minAttackRangeMeters": 0,
+        "maxAttackRangeMeters": 0,
+        "speedMetersPerSecond": 0
+    }
+}

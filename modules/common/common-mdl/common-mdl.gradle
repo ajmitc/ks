@@ -1,7 +1,7 @@
 description = "Common Models for KS"
 
 dependencies {
-    //compile project(":modules:common:common-mdl")
+    compile project(":modules:common:common-util")
 }
 
 apply from: "$rootDir/buildtool/core.gradle"

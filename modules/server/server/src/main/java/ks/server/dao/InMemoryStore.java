@@ -5,6 +5,7 @@ import ks.common.model.game.Game;
 import ks.common.model.side.Side;
 import ks.common.model.terrain.Battlefield;
 import ks.common.model.unit.Unit;
+import ks.common.model.unit.UnitSize;
 import ks.common.model.unit.UnitType;
 import ks.common.model.user.User;
 import ks.common.model.user.UserRole;
@@ -80,8 +81,8 @@ public class InMemoryStore implements ServerDAO {
         game.getForces().add(new Force(forceAId, sideAId, generalAId));
         game.getForces().add(new Force(forceBId, sideBId, generalBId));
 
-        game.getForces().get(0).getUnits().add(new Unit("" + UUID.randomUUID(), sideAId, forceAId, "1st Infantry", UnitType.INFANTRY));
-        game.getForces().get(1).getUnits().add(new Unit("" + UUID.randomUUID(), sideBId, forceBId, "2st Infantry", UnitType.INFANTRY));
+        game.getForces().get(0).getUnits().add(new Unit("" + UUID.randomUUID(), sideAId, forceAId, "1st Infantry", UnitType.INFANTRY, UnitSize.HALF_BATTALION, 450));
+        game.getForces().get(1).getUnits().add(new Unit("" + UUID.randomUUID(), sideBId, forceBId, "2st Infantry", UnitType.INFANTRY, UnitSize.HALF_BATTALION, 450));
 
         gameList.getGames().add(game);
     }
